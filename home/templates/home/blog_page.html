@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-blogpage{% endblock %}
+
+{% block content %}
+    
+    <h1>{{ page.title }}</h1>
+    
+    <p class="meta">{{ page.date }}</p>
+
+    <div class="intro">{{ page.intro }}</div>
+
+    {{ page.body|richtext }}
+
+    <div class="intro">
+        {% for block in page.blogElement %}
+            {% if block.block_type == 'image' %}
+                {% image block.picture fill-720x960 as tmp_pic%}
+                    <div class="oc-item">
+                        <img src="{{ tmp_pic.url }}" alt="{{ item.caption}}">
+                    </div>
+            {% else %}
+                <section>{% include_block block %}</section>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
+
+{% endblock %}
